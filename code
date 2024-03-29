@@ -1,0 +1,325 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.SimpleDateFormat; // Import SimpleDateFormat class import java.util.Date;
+public class OnlineBankingLogin extends JFrame implements ActionListener { private JTextField usernameField;
+private JTextField accountNumberField;
+private JPasswordField passwordField;
+private JButton loginButton;
+public OnlineBankingLogin() {
+setTitle("Online Banking Login");
+setSize(300, 200); setDefaultCloseOperation(EXIT_ON_CLOSE); setLocationRelativeTo(null);
+JPanel mainPanel = new JPanel(new BorderLayout());
+JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); ImageIcon logoIcon = new ImageIcon("av.png"); 
+"logo.png"
+JLabel logoLabel = new JLabel(logoIcon); logoPanel.add(logoLabel);
+JPanel mPanel = new JPanel(new BorderLayout());
+JPanel panel = new JPanel(new GridBagLayout()); panel.setBackground(new Color(173, 216, 230));
+JLabel brandingLabel = new JLabel("Welcome to AV Banking System!"); JLabel userLabel = new JLabel("Username:");
+JLabel accountNumberLabel = new JLabel("Account Number:"); JLabel passLabel = new JLabel("Password:");
+usernameField = new JTextField(20);
+accountNumberField = new JTextField(20);
+passwordField = new JPasswordField(20); loginButton = new JButton("Login");
+loginButton.addActionListener(this);
+GridBagConstraints gbc = new GridBagConstraints(); gbc.gridx = 0;
+gbc.gridy = 0;
+gbc.insets = new Insets(5, 5, 5, 5); panel.add(brandingLabel, gbc);
+gbc.gridy = 1; panel.add(userLabel, gbc);
+gbc.gridx = 1; panel.add(usernameField, gbc);
+gbc.gridy = 2;
+gbc.gridx = 0; panel.add(accountNumberLabel, gbc);
+gbc.gridx = 1; panel.add(accountNumberField, gbc);
+gbc.gridx = 0;
+gbc.gridy = 3; panel.add(passLabel, gbc);
+gbc.gridx = 1; panel.add(passwordField, gbc);
+gbc.gridx = 0;
+gbc.gridy = 4;
+gbc.gridwidth = 2;
+gbc.anchor = GridBagConstraints.CENTER; panel.add(loginButton, gbc);
+mainPanel.add(panel, BorderLayout.CENTER);
+add(mainPanel);
+setVisible(true); }
+public void actionPerformed(ActionEvent e) {
+String username = usernameField.getText();
+String accountNumber = accountNumberField.getText(); String password = new String(passwordField.getPassword());
+// Replace this with actual authentication logic
+if (username.equals("admin") && password.equals("admin123")) {
+JOptionPane.showMessageDialog(this, "Login successful!");
+dispose(); // Close the login window
+new FeaturesPage(username, accountNumber); // Open the features page
+} else {
+JOptionPane.showMessageDialog(this, "Invalid username or password. Please try
+again.");
+} }
+public static void main(String[] args) { new OnlineBankingLogin();
+} }
+class FeaturesPage extends JFrame { private String userName;
+private String accountNumber;
+public FeaturesPage(String userName, String accountNumber) { this.userName = userName;
+this.accountNumber = accountNumber;
+setTitle("AV Banking Features");
+setSize(600, 400); setDefaultCloseOperation(EXIT_ON_CLOSE); setLocationRelativeTo(null);
+JPanel mainPanel = new JPanel(new BorderLayout());
+mainPanel.setBackground(new Color(173, 216, 230)); // Set light blue background color for the entire window
+JLabel headerLabel = new JLabel("Welcome, " + userName + " | Account Number: " + accountNumber);
+headerLabel.setFont(new Font("Arial", Font.BOLD, 16)); headerLabel.setHorizontalAlignment(SwingConstants.LEFT);
+JLabel balanceLabel = new JLabel("Available Balance: ₹5000.00"); // Replace with actual balance
+balanceLabel.setFont(new Font("Arial", Font.PLAIN, 12)); balanceLabel.setHorizontalAlignment(SwingConstants.LEFT);
+JPanel headerPanel = new JPanel();
+headerPanel.setLayout(new BorderLayout());
+headerPanel.add(headerLabel, BorderLayout.WEST);
+headerPanel.add(balanceLabel, BorderLayout.EAST); // Add balance label to the header
+panel
+mainPanel.add(headerPanel, BorderLayout.NORTH);
+JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 10, 10));
+buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
+buttonPanel.setBackground(new Color(173, 216, 230)); // Light blue color
+JButton withdrawButton = new JButton("Withdraw");
+JButton depositButton = new JButton("Deposit");
+JButton checkBalanceButton = new JButton("Check Balance"); JButton takeLoanButton = new JButton("Take Loan");
+JButton doInquiryButton = new JButton("Do Inquiry");
+JButton emiCalculatorButton = new JButton("EMI Calculator"); JButton creditCardButton = new JButton("Apply Credit Card"); JButton applyForServiceButton = new JButton("Apply for Service");
+applyForServiceButton.addActionListener(e -> {
+String[] services = {"EMI", "DEPOSITS", "ACCOUNTS"}; // Replace with actual
+banking services
+String selectedService = (String) JOptionPane.showInputDialog(this, "What service are
+you looking for?", "Service Selection", JOptionPane.QUESTION_MESSAGE, null, services, services[0]);
+if (selectedService != null) {
+// Do something with the selected service JOptionPane.showMessageDialog(this, "You selected: " + selectedService);
+} });
+withdrawButton.addActionListener(e -> { new WithdrawWindow();
+});
+depositButton.addActionListener(e -> { new DepositWindow();
+});
+checkBalanceButton.addActionListener(e -> { new CheckBalanceWindow();
+});
+takeLoanButton.addActionListener(e -> { new LoanOptionsWindow();
+});
+doInquiryButton.addActionListener(e -> {
+new InquiryWindow(); // Open the Inquiry window when clicking on the Inquiry button
+});
+emiCalculatorButton.addActionListener(e -> {
+new EMICalculatorWindow(); // Open the EMI Calculator window });
+creditCardButton.addActionListener(e -> {
+new CreditCardApplicationForm(); // Open the Credit Card Application Form window });
+doInquiryButton.addActionListener(e -> { JOptionPane.showMessageDialog(this, "Do Inquiry feature clicked");
+}); buttonPanel.add(withdrawButton);
+buttonPanel.add(depositButton); buttonPanel.add(checkBalanceButton); buttonPanel.add(takeLoanButton); buttonPanel.add(doInquiryButton); buttonPanel.add(emiCalculatorButton); buttonPanel.add(creditCardButton); // buttonPanel.add(applyForServiceButton);
+JScrollPane scrollPane = new JScrollPane(buttonPanel); mainPanel.add(scrollPane, BorderLayout.WEST);
+// Add clock panel to display time and date
+JPanel clockPanel = new ClockPanel(); mainPanel.add(clockPanel, BorderLayout.EAST);
+JLabel avFinanceLabel = new JLabel("AV Finance"); avFinanceLabel.setFont(new Font("Arial", Font.BOLD, 24)); avFinanceLabel.setHorizontalAlignment(SwingConstants.CENTER); mainPanel.add(avFinanceLabel, BorderLayout.CENTER);
+add(mainPanel); setVisible(true);
+}
+// ClockPanel to display time and date private class ClockPanel extends JPanel {
+private JLabel clockLabel;
+public ClockPanel() {
+setLayout(new FlowLayout(FlowLayout.RIGHT)); setBackground(new Color(173, 216, 230)); 
+clockLabel = new JLabel(); updateClock(); add(clockLabel);
+Timer timer = new Timer(1000, new ActionListener() {
+@Override
+public void actionPerformed(ActionEvent e) {
+updateClock(); }
+});
+timer.start(); }
+// Update the clock label with current time and date private void updateClock() {
+SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy | hh:mm:ss a");
+String formattedDate = dateFormat.format(new Date());
+clockLabel.setText(formattedDate); }
+}
+// Other classes omitted for brevity }
+class WithdrawWindow extends JFrame { private JTextField withdrawField;
+public WithdrawWindow() {
+setTitle("Withdraw");
+setSize(300, 200); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JLabel withdrawLabel = new JLabel("Enter Amount to Withdraw (₹):"); withdrawField = new JTextField();
+JButton withdrawButton = new JButton("Withdraw");
+withdrawButton.addActionListener(e -> {
+double withdrawAmount = Double.parseDouble(withdrawField.getText());
+double remainingBalance = 5000.0; // Example remaining balance
+remainingBalance -= withdrawAmount;
+JOptionPane.showMessageDialog(this, "Withdrawal successful!\nRemaining Balance: ₹"
++ remainingBalance);
+dispose(); 
+});
+panel.add(withdrawLabel); panel.add(withdrawField); panel.add(withdrawButton);
+add(panel);
+setVisible(true); }
+}
+class DepositWindow extends JFrame { public DepositWindow() {
+setTitle("Deposit");
+setSize(300, 200); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JLabel depositLabel = new JLabel("Enter Amount to Deposit (₹):"); JTextField depositField = new JTextField();
+JButton depositButton = new JButton("Deposit");
+depositButton.addActionListener(e -> {
+double depositAmount = Double.parseDouble(depositField.getText());
+double currentBalance = 5000.0; // Example current balance
+double newBalance = currentBalance + depositAmount; JOptionPane.showMessageDialog(this, "Deposit successful!\nNew Balance: ₹" +
+newBalance);
+dispose(); // Close the deposit window
+});
+panel.add(depositLabel); panel.add(depositField); panel.add(depositButton);
+add(panel);
+setVisible(true); }
+}
+class CheckBalanceWindow extends JFrame {
+public CheckBalanceWindow() {
+setTitle("Check Balance");
+setSize(300, 200); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+// Example remaining balance double remainingBalance = 5000.0;
+JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JLabel balanceLabel = new JLabel("Remaining Balance: ₹" + remainingBalance); balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
+panel.add(balanceLabel);
+add(panel);
+setVisible(true); }
+}
+class LoanOptionsWindow extends JFrame { public LoanOptionsWindow() {
+setTitle("Loan Options");
+setSize(300, 200); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JButton studyLoanButton = new JButton("Study Loan"); JButton homeLoanButton = new JButton("Home Loan"); JButton carLoanButton = new JButton("Car Loan"); JButton otherLoanButton = new JButton("Other Loan");
+studyLoanButton.addActionListener(e -> { JOptionPane.showMessageDialog(this, "Study Loan feature clicked");
+});
+homeLoanButton.addActionListener(e -> { JOptionPane.showMessageDialog(this, "Home Loan feature clicked");
+});
+carLoanButton.addActionListener(e -> { JOptionPane.showMessageDialog(this, "Car Loan feature clicked");
+});
+otherLoanButton.addActionListener(e -> { JOptionPane.showMessageDialog(this, "Other Loan feature clicked");
+});
+panel.add(studyLoanButton);
+panel.add(homeLoanButton); panel.add(carLoanButton);
+panel.add(otherLoanButton);
+add(panel); setVisible(true);
+}
+private void openLoanApplicationForm(String loanType) {
+new LoanApplicationForm(loanType); }
+}
+class LoanApplicationForm extends JFrame { public LoanApplicationForm(String loanType) {
+setTitle("Loan Application Form - " + loanType); setSize(400, 300); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JLabel nameLabel = new JLabel("Name:");
+JTextField nameField = new JTextField();
+JLabel numberLabel = new JLabel("Phone Number:"); JTextField numberField = new JTextField();
+JLabel dobLabel = new JLabel("Date of Birth:"); JTextField dobField = new JTextField();
+JLabel panLabel = new JLabel("PAN Number:"); JTextField panField = new JTextField();
+JButton applyButton = new JButton("Apply"); applyButton.addActionListener(e -> {
+String name = nameField.getText();
+String phoneNumber = numberField.getText(); String dob = dobField.getText();
+String panNumber = panField.getText();
+// You can perform further operations with the entered data, like submitting to a database or showing a confirmation message.
+JOptionPane.showMessageDialog(this, "Loan application submitted successfully!");
+dispose(); // Close the loan application form window });
+panel.add(nameLabel);
+panel.add(nameField);
+panel.add(numberLabel);
+panel.add(numberField);
+panel.add(dobLabel);
+panel.add(dobField);
+panel.add(panLabel);
+panel.add(panField);
+panel.add(new JLabel()); // Placeholder for empty space panel.add(applyButton);
+add(panel);
+setVisible(true); }
+}
+class InquiryWindow extends JFrame {
+public InquiryWindow() {
+setTitle("Inquiry");
+setSize(400, 300); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JLabel nameLabel = new JLabel("Name:");
+JTextField nameField = new JTextField();
+JLabel numberLabel = new JLabel("Phone Number:"); JTextField numberField = new JTextField();
+JLabel dobLabel = new JLabel("Date of Birth:");
+JTextField dobField = new JTextField();
+JLabel accountNumberLabel = new JLabel("Account Number:"); JTextField accountNumberField = new JTextField();
+JLabel inquiryLabel = new JLabel("Inquiry:"); JTextArea inquiryArea = new JTextArea();
+JButton submitButton = new JButton("Submit");
+submitButton.addActionListener(e -> {
+// Process inquiry form data here
+String name = nameField.getText();
+String phoneNumber = numberField.getText(); String dob = dobField.getText();
+String accountNumber = accountNumberField.getText(); String inquiry = inquiryArea.getText();
+// You can perform further operations with the entered data, like submitting to a database or showing a confirmation message.
+JOptionPane.showMessageDialog(this, "Inquiry submitted successfully!");
+dispose(); // Close the inquiry form window });
+panel.add(nameLabel);
+panel.add(nameField);
+panel.add(numberLabel);
+panel.add(numberField);
+panel.add(dobLabel);
+panel.add(dobField);
+panel.add(accountNumberLabel); panel.add(accountNumberField); panel.add(inquiryLabel);
+panel.add(inquiryArea);
+panel.add(new JLabel()); // Placeholder for empty space panel.add(submitButton);
+add(panel);
+setVisible(true); }
+public static void main(String[] args) { SwingUtilities.invokeLater(() -> new InquiryWindow());
+} }
+class EMICalculatorWindow extends JFrame { private JTextField loanAmountField; private JTextField interestRateField;
+private JTextField loanTermField;
+private JLabel emiLabel;
+public EMICalculatorWindow() {
+setTitle("EMI Calculator");
+setSize(300, 200); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JLabel loanAmountLabel = new JLabel("Loan Amount:"); loanAmountField = new JTextField();
+JLabel interestRateLabel = new JLabel("Interest Rate (%):"); interestRateField = new JTextField();
+JLabel loanTermLabel = new JLabel("Loan Term (months):"); loanTermField = new JTextField();
+JButton calculateButton = new JButton("Calculate"); calculateButton.addActionListener(e -> calculateEMI());
+emiLabel = new JLabel("EMI: ");
+emiLabel.setFont(new Font("Arial", Font.BOLD, 14)); emiLabel.setHorizontalAlignment(SwingConstants.CENTER);
+panel.add(loanAmountLabel); panel.add(loanAmountField); panel.add(interestRateLabel); panel.add(interestRateField); panel.add(loanTermLabel); panel.add(loanTermField);
+panel.add(new JLabel()); // Empty label for spacing panel.add(calculateButton);
+panel.add(new JLabel()); // Empty label for spacing panel.add(emiLabel);
+add(panel);
+setVisible(true); }
+private void calculateEMI() { try {
+double loanAmount = Double.parseDouble(loanAmountField.getText()); double interestRate = Double.parseDouble(interestRateField.getText()); double loanTerm = Double.parseDouble(loanTermField.getText());
+double monthlyInterestRate = interestRate / 100 / 12;
+double emi = loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTerm) / (Math.pow(1 + monthlyInterestRate, loanTerm) - 1);
+emiLabel.setText("EMI: ₹" + String.format("%.2f", emi)); } catch (NumberFormatException ex) {
+JOptionPane.showMessageDialog(this, "Please enter valid numeric values."); }
+} }
+class CreditCardApplicationForm extends JFrame { public CreditCardApplicationForm() {
+setTitle("Credit Card Application Form"); setSize(400, 300); setDefaultCloseOperation(DISPOSE_ON_CLOSE); setLocationRelativeTo(null);
+JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding to the panel
+JLabel nameLabel = new JLabel("Name:");
+JTextField nameField = new JTextField();
+JLabel numberLabel = new JLabel("Phone Number:");
+JTextField numberField = new JTextField();
+JLabel dobLabel = new JLabel("Date of Birth:");
+JTextField dobField = new JTextField();
+JLabel cardTypeLabel = new JLabel("Choose Card Type:");
+JComboBox<String> cardTypeComboBox = new JComboBox<>(new String[]{"Gold",
+"Platinum", "Silver"});
+JButton applyButton = new JButton("Apply");
+applyButton.addActionListener(e -> {
+// Process credit card application form data here
+String name = nameField.getText();
+String phoneNumber = numberField.getText();
+String dob = dobField.getText();
+String cardType = (String) cardTypeComboBox.getSelectedItem();
+// You can perform further operations with the entered data, like submitting to a database or showing a confirmation message.
+JOptionPane.showMessageDialog(this, "Credit card application submitted successfully!");
+dispose(); // Close the credit card application form window });
+panel.add(nameLabel);
+panel.add(nameField);
+panel.add(numberLabel);
+panel.add(numberField);
+panel.add(dobLabel);
+panel.add(dobField);
+panel.add(cardTypeLabel); panel.add(cardTypeComboBox);
+panel.add(new JLabel()); // Placeholder for empty space panel.add(applyButton);
+add(panel);
+setVisible(true); }
+}
